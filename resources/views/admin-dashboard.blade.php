@@ -281,7 +281,7 @@ html, body {
             </div>
             <div class="grid">
 
-                <a href="#" class="action-card card-users">
+                <a href="{{ route('admin.users.index') }}" class="action-card card-users">
                     Manage Users
                 </a>
 
