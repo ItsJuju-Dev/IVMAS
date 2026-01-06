@@ -19,3 +19,6 @@ Route::get('/', function () {
 Route::get('/owner', function (){
     return view('owner-dashboard');
 });
+Route::get('/calendar', function () {
+    return view('calendar.index');
+});

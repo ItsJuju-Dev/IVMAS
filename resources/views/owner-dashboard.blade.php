@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Owner Dashboard</title>
+<title>IVMAS Owner Dashboard</title>
 
+<!-- ================= LIBRARIES ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
 <style>
-/* ================= RESET ================= */
+/* =====================================================
+   RESET & BASE
+===================================================== */
 * {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -19,69 +24,105 @@ html, body {
     background: #f4f6f8;
 }
 
-/* ================= LAYOUT ================= */
+/* =====================================================
+   HEADER
+===================================================== */
+.top-header {
+    height: 64px;
+    background: #020617;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    color: #fff;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
 .wrapper {
     display: flex;
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
 }
 
-/* ================= SIDEBAR ================= */
+/* =====================================================
+   SIDEBAR
+===================================================== */
 .sidebar {
     width: 220px;
-    min-width: 220px;
-    background: #1f2937;
-    color: #fff;
+    background: #020617;
     padding: 16px;
-}
-
-.sidebar h2 {
-    margin: 0 0 20px;
-    font-size: 20px;
 }
 
 .sidebar a {
     display: block;
     color: #cbd5e1;
     text-decoration: none;
-    margin-bottom: 12px;
-    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
 }
 
-/* ================= MAIN ================= */
+.sidebar a.active {
+    background: #1e40af;
+    color: #fff;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
 .main {
     flex: 1;
     padding: 20px 24px;
     max-width: 1400px;
 }
 
-/* ================= CARD ================= */
+/* =====================================================
+   CARD
+===================================================== */
 .card {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 16px 18px;
     margin-bottom: 12px;
 }
 
-/* ================= TOP ACTIONS ================= */
+/* =====================================================
+   DASHBOARD LAYOUT
+===================================================== */
 .top-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 12px;
 }
 
-/* ================= KPI ================= */
 .kpi {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 12px;
-}
-
-.kpi h3 {
-    margin: 0;
-    font-size: 13px;
-    color: #64748b;
 }
 
 .kpi .value {
@@ -89,275 +130,231 @@ html, body {
     font-weight: bold;
 }
 
-/* ================= GRID ================= */
 .grid {
     display: grid;
     grid-template-columns: 68% 32%;
     gap: 14px;
 }
 
-/* ================= CHART CARD ================= */
 .chart-card {
     height: 320px;
 }
 
-.chart-card canvas {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-/* ================= INDICATOR CARD (FIXED) ================= */
 .indicator-card {
     height: 200px;
-    display: flex;
-    flex-direction: column;
 }
 
-.indicator-header h4 {
-    margin: 0;
-    font-size: 13px;
-    color: #64748b;
-}
-
-.indicator-header .number {
-    font-size: 26px;
-    font-weight: bold;
-}
-
-.indicator-chart {
-    flex: 1;
-    position: relative;
-}
-
-.indicator-chart canvas {
+canvas {
     width: 100% !important;
     height: 100% !important;
 }
 
-/* ================= BUTTON ================= */
-.btn {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn.secondary {
-    background: #4b5563;
-    color: #fff;
-}
-
-.btn.primary {
-    background: #2563eb;
-    color: #fff;
-}
-
-/* ================= MODAL ================= */
-.modal {
+/* =====================================================
+   CALENDAR
+===================================================== */
+.calendar-page {
     display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
 }
 
-.modal-content {
-    background: #fff;
-    padding: 24px;
-    width: 420px;
-    border-radius: 10px;
+#calendar {
+    max-width: 100%;
 }
 </style>
 </head>
 
 <body>
 
+<!-- ================= HEADER ================= -->
+<div class="top-header">
+    <div class="logo">IVMAS</div>
+    <div class="header-right">
+        <div class="avatar">A</div>
+        <span>Admin User</span>
+        <span>Logout</span>
+    </div>
+</div>
+
 <div class="wrapper">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h2>IVMAS</h2>
-        <a href="#">Settings</a>
-        <a href="#">Metrics</a>
-        <a href="#"><strong>Dashboard</strong></a>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main">
-
-        <!-- TOP ACTIONS -->
-        <div class="top-actions">
-            <div class="card">
-                <h3>Booking Calendar</h3>
-                <p style="font-size:13px;color:#64748b">
-                    Select a date to view bookings (placeholder).
-                </p>
-                <input type="date" style="padding:8px;font-size:14px">
-            </div>
-
-            <div class="card">
-                <h3>Import Booking Data</h3>
-                <p style="font-size:13px;color:#64748b">
-                    Import booking data from external sources (CSV / API).
-                </p>
-                <button class="btn secondary" onclick="openImportModal()">Import Data</button>
-            </div>
-        </div>
-
-        <!-- KPI -->
-        <div class="kpi">
-            <div class="card">
-                <h3>Indicator 1</h3>
-                <div class="value">950</div>
-                <small style="color:#16a34a">▲ 11.8%</small>
-            </div>
-
-            <div class="card">
-                <h3>Goal</h3>
-                <div class="value">1,000</div>
-            </div>
-        </div>
-
-        <!-- GRID -->
-        <div class="grid">
-
-            <!-- LEFT -->
-            <div>
-                <div class="card chart-card">
-                    <h3>Sales vs Goal</h3>
-                    <canvas id="salesChart"></canvas>
-                </div>
-
-                <div class="card chart-card">
-                    <h3>% Goal</h3>
-                    <canvas id="goalChart"></canvas>
-                </div>
-
-                <div class="card chart-card">
-                    <h3>Month-over-Month (MoM)</h3>
-                    <canvas id="momChart"></canvas>
-                </div>
-            </div>
-
-            <!-- RIGHT (INDICATORS) -->
-            <div>
-                <div class="card indicator-card">
-                    <div class="indicator-header">
-                        <h4>Indicator 2</h4>
-                        <div class="number">800</div>
-                    </div>
-                    <div class="indicator-chart">
-                        <canvas id="i2"></canvas>
-                    </div>
-                </div>
-
-                <div class="card indicator-card">
-                    <div class="indicator-header">
-                        <h4>Indicator 3</h4>
-                        <div class="number">518</div>
-                    </div>
-                    <div class="indicator-chart">
-                        <canvas id="i3"></canvas>
-                    </div>
-                </div>
-
-                <div class="card indicator-card">
-                    <div class="indicator-header">
-                        <h4>Indicator 4</h4>
-                        <div class="number">710</div>
-                    </div>
-                    <div class="indicator-chart">
-                        <canvas id="i4"></canvas>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+    <a id="tabDashboard" class="active" onclick="showDashboard()">Dashboard</a>
+    <a id="tabCalendar" onclick="showCalendar()">Calendar</a>
 </div>
 
-<!-- MODAL -->
-<div id="importModal" class="modal">
-    <div class="modal-content">
-        <h3>Import Booking Data</h3>
-        <p>
-            This feature will allow owners to import booking data from external
-            platforms such as CSV files or third-party APIs.
+<!-- ================= MAIN ================= -->
+<div class="main">
+
+<!-- ================= DASHBOARD PAGE ================= -->
+<div id="dashboardPage">
+
+<div class="top-actions">
+    <div class="card">
+        <h3>Generate Report</h3>
+        <p style="font-size:13px;color:#64748b">
+            Select a date range to generate performance reports.
         </p>
-        <em>Feature coming soon.</em><br><br>
-        <button class="btn primary" onclick="closeImportModal()">Close</button>
+        <div style="display:flex;gap:8px">
+            <input type="date">
+            <span>to</span>
+            <input type="date">
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Import Booking Data</h3>
+        <button>Import Data</button>
     </div>
 </div>
 
+<div class="kpi">
+    <div class="card">
+        <h3>Indicator 1</h3>
+        <div class="value">950</div>
+    </div>
+    <div class="card">
+        <h3>Goal</h3>
+        <div class="value">1,000</div>
+    </div>
+</div>
+
+<div class="grid">
+
+<div>
+    <div class="card chart-card">
+        <h3>Sales vs Goal</h3>
+        <canvas id="salesChart"></canvas>
+    </div>
+
+    <div class="card chart-card">
+        <h3>% Goal</h3>
+        <canvas id="goalChart"></canvas>
+    </div>
+
+    <div class="card chart-card">
+        <h3>Month-over-Month (MoM)</h3>
+        <canvas id="momChart"></canvas>
+    </div>
+</div>
+
+<div>
+    <div class="card indicator-card"><canvas id="i2"></canvas></div>
+    <div class="card indicator-card"><canvas id="i3"></canvas></div>
+    <div class="card indicator-card"><canvas id="i4"></canvas></div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= CALENDAR PAGE ================= -->
+<div id="calendarPage" class="calendar-page">
+    <div class="card">
+        <h2 style="margin-bottom:12px">Calendar Interface</h2>
+        <div id="calendar"></div>
+    </div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
 <script>
-function openImportModal() {
-    document.getElementById('importModal').style.display = 'flex';
+/* ================= TAB CONTROL ================= */
+function showDashboard(){
+    dashboardPage.style.display = "block";
+    calendarPage.style.display = "none";
+    tabDashboard.classList.add("active");
+    tabCalendar.classList.remove("active");
 }
-function closeImportModal() {
-    document.getElementById('importModal').style.display = 'none';
+
+let calendarInitialized = false;
+
+function showCalendar(){
+    dashboardPage.style.display = "none";
+    calendarPage.style.display = "block";
+    tabCalendar.classList.add("active");
+    tabDashboard.classList.remove("active");
+
+    if(!calendarInitialized){
+        initCalendar();
+        calendarInitialized = true;
+    }
 }
 
-const baseOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } }
-};
+/* ================= CHARTS ================= */
+document.addEventListener("DOMContentLoaded", function(){
 
-new Chart(salesChart, {
-    type: 'bar',
-    data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-        datasets: [
-            { data: [900,850,780,920,880,910], backgroundColor:'#2dd4bf' },
-            { data: [1000,1000,1000,1000,1000,1000], backgroundColor:'#e5e7eb' }
-        ]
-    },
-    options: baseOptions
+const base = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} };
+
+new Chart(salesChart,{
+    type:"bar",
+    data:{labels:["Jan","Feb","Mar","Apr","May","Jun"],
+    datasets:[
+        {data:[900,850,780,920,880,910],backgroundColor:"#2dd4bf"},
+        {data:[1000,1000,1000,1000,1000,1000],backgroundColor:"#e5e7eb"}
+    ]},
+    options:base
 });
 
-new Chart(goalChart, {
-    type: 'doughnut',
-    data: {
-        datasets: [{ data: [95,5], backgroundColor:['#2dd4bf','#e5e7eb'] }]
-    },
-    options: baseOptions
+new Chart(goalChart,{
+    type:"doughnut",
+    data:{datasets:[{data:[95,5],backgroundColor:["#2dd4bf","#e5e7eb"]}]},
+    options:base
 });
 
-new Chart(momChart, {
-    type: 'bar',
-    data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
-        datasets: [{
-            data: [2.5,1.2,-21,7.7,18.3,-2.1],
-            backgroundColor: ctx => ctx.raw < 0 ? '#ef4444' : '#2dd4bf'
-        }]
-    },
-    options: baseOptions
+new Chart(momChart,{
+    type:"bar",
+    data:{labels:["Jan","Feb","Mar","Apr","May","Jun"],
+    datasets:[{data:[2.5,1.2,-21,7.7,18.3,-2.1],
+    backgroundColor:c=>c.raw<0?"#ef4444":"#2dd4bf"}]},
+    options:base
 });
 
-function miniChart(id){
+function mini(id){
     new Chart(document.getElementById(id),{
-        type:'line',
-        data:{
-            labels:[1,2,3,4,5,6],
-            datasets:[{
-                data:[10,12,9,14,11,13],
-                borderColor:'#facc15',
-                tension:0.4
-            }]
-        },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            plugins:{ legend:{display:false} },
-            scales:{ x:{display:false}, y:{display:false} }
-        }
+        type:"line",
+        data:{labels:[1,2,3,4,5,6],
+        datasets:[{data:[10,12,9,14,11,13],borderColor:"#facc15",tension:.4}]},
+        options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{x:{display:false},y:{display:false}}}
     });
 }
-miniChart('i2'); miniChart('i3'); miniChart('i4');
+mini("i2"); mini("i3"); mini("i4");
+
+});
+
+/* ================= FULLCALENDAR ================= */
+function initCalendar(){
+    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        selectable: true,
+        select(info){
+            const title = prompt("Event title:");
+            if(title){
+                calendar.addEvent({
+                    title,
+                    start: info.start,
+                    end: info.end,
+                    allDay: info.allDay
+                });
+            }
+        },
+        eventClick(info){
+            if(confirm(`Delete "${info.event.title}"?`)){
+                info.event.remove();
+            }
+        }
+    });
+
+    calendar.render();
+}
 </script>
 
 </body>
