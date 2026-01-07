@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Manage Users</title>
+@extends('layouts.admin')
+
+@section('title', 'User Management')
+
+@section('content')
 
     <style>
         body {
@@ -85,6 +85,24 @@
             background: #3cb371 ;
         }
 
+        /* ADD USER FORM */
+        .add-user-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-user-form input,
+        .add-user-form select {
+            height: 34px;
+            padding: 6px 8px;
+            font-size: 13px;
+        }
+
+        .add-user-form button {
+            height: 34px;
+            white-space: nowrap;
+        }
 
         /* CARD */
         .card {
@@ -198,7 +216,7 @@
             <p>Manage system users and assign roles.</p>
         </div>
 
-        <form action="{{ route('admin.users.store') }}" method="POST" style="margin-bottom:24px;">
+        <form action="{{ route('admin.users.store') }}" method="POST" class="add-user-form">
             @csrf
 
             <input type="text" name="name" placeholder="Name" required>
@@ -349,5 +367,4 @@ function closeDeleteModal() {
 </script>
 
 
-</body>
-</html>
+@endsection

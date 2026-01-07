@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,38 +30,49 @@ Route::get('/', function () {
 | Admin Dashboard
 |-----------------------------------
 */
-Route::get('/admin', function () {
-    return view('admin-dashboard');
-})->name('admin.dashboard');
+Route::get('/admin', [DashboardController::class, 'index'])
+    ->name('admin.dashboard');
 
-/*
-|-----------------------------------
-| Admin - User Management (Iteration 1)
-|-----------------------------------
-*/
 Route::prefix('admin')->group(function () {
 
-    // Show users list
+    /*
+    |-------------------------
+    | User Management
+    |-------------------------
+    */
     Route::get('/users', [UserController::class, 'index'])
         ->name('admin.users.index');
 
-    // Create user
     Route::post('/users', [UserController::class, 'store'])
         ->name('admin.users.store');
 
-    // Edit user
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])
         ->name('admin.users.edit');
 
-    // Update user    
     Route::put('/users/{user}', [UserController::class, 'update'])
         ->name('admin.users.update');
 
-    // Delete user
     Route::delete('/users/{user}', [UserController::class, 'destroy'])
         ->name('admin.users.destroy');
 
+    /*
+    |-------------------------
+    | Room Management
+    |-------------------------
+    */
+    Route::get('/rooms', [RoomController::class, 'index'])
+        ->name('admin.rooms.index');
+
+    Route::post('/rooms', [RoomController::class, 'store'])
+        ->name('admin.rooms.store');
+
+    Route::put('/rooms/{room}', [RoomController::class, 'update'])
+        ->name('admin.rooms.update');
+
+    Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])
+        ->name('admin.rooms.destroy');
 });
+
 
 /*
 |-----------------------------------
