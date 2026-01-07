@@ -255,8 +255,8 @@ html,body{
     </div>
 
     <div class="card">
-        <h3>Import Booking Data</h3>
-        <button onclick="alert('Coming soon!')">Import Data</button>
+        <h3>Export Booking Data</h3>
+        <button onclick="alert('Coming soon!')">Export Data</button>
     </div>
 </div>
 
