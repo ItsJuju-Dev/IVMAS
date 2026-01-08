@@ -8,12 +8,6 @@ use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
 | Public Routes
 |--------------------------------------------------------------------------
 */
@@ -46,6 +40,15 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Owner / Staff Shared Features
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/calendar', function () {
+        return view('calendar.index');
+    })->name('calendar.index');
+
+    /*
+    |--------------------------------------------------------------------------
     | Profile
     |--------------------------------------------------------------------------
     */
@@ -55,34 +58,23 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Admin Routes (Protected)
+    | Admin Routes
     |--------------------------------------------------------------------------
     */
-    Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::prefix('admin')
+    ->middleware('role:admin')
+    ->group(function () {
 
-        /*
-        |-------------------------
-        | Admin Dashboard
-        |-------------------------
-        */
         Route::get('/', [DashboardController::class, 'index'])
             ->name('admin.dashboard');
 
-        /*
-        |-------------------------
-        | User Management
-        |-------------------------
-        */
+        // User Management
         Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
         Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
-        /*
-        |-------------------------
-        | Room Management
-        |-------------------------
-        */
+        // Room Management
         Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
         Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('admin.rooms.update');
