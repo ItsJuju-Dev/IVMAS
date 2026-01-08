@@ -1,51 +1,98 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
-
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role-Based Dashboard
+    |--------------------------------------------------------------------------
+    */
     Route::get('/dashboard', function () {
-    $user = auth()->user();
+        $user = auth()->user();
 
-    if ($user->role === 'admin') {
-        return view('admin-dashboard');
-    }
+        return match ($user->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'owner' => view('owner-dashboard'),
+            'staff' => view('staff-dashboard'),
+            default => abort(403),
+        };
+    })->name('dashboard');
 
-    if ($user->role === 'owner') {
-        return view('owner-dashboard');
-    }
-
-    if ($user->role === 'staff') {
-        return view('staff-dashboard');
-    }
-
-    abort(403);
-})->name('dashboard');
-
+    /*
+    |--------------------------------------------------------------------------
+    | Profile
+    |--------------------------------------------------------------------------
+    */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Routes (Protected)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('admin')->middleware('auth')->group(function () {
+
+        /*
+        |-------------------------
+        | Admin Dashboard
+        |-------------------------
+        */
+        Route::get('/', [DashboardController::class, 'index'])
+            ->name('admin.dashboard');
+
+        /*
+        |-------------------------
+        | User Management
+        |-------------------------
+        */
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+        Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+        /*
+        |-------------------------
+        | Room Management
+        |-------------------------
+        */
+        Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
+        Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
+        Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('admin.rooms.update');
+        Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('admin.rooms.destroy');
+    });
 });
 
-
-
+/*
+|--------------------------------------------------------------------------
+| Auth Routes (Laravel Breeze)
+|--------------------------------------------------------------------------
+*/
 require __DIR__.'/auth.php';
