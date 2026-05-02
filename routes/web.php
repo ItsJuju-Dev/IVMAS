@@ -4,7 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Staff\BookingController;
+use App\Http\Controllers\Staff\CalendarController;
+use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
+use App\Http\Controllers\Owner\CalendarController as OwnerCalendarController;
+use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,20 +37,43 @@ Route::middleware('auth')->group(function () {
 
         return match ($user->role) {
             'admin' => redirect()->route('admin.dashboard'),
-            'owner' => view('owner-dashboard'),
-            'staff' => view('staff-dashboard'),
+            'owner' => redirect()->route('owner.dashboard'),
+            'staff' => redirect()->route('staff.dashboard'),
             default => abort(403),
         };
     })->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | Owner / Staff Shared Features
+    | Owner Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('/calendar', function () {
-        return view('calendar.index');
-    })->name('calendar.index');
+    Route::prefix('owner')
+    ->name('owner.')
+    ->middleware(['auth','role:owner'])
+    ->group(function () {
+
+        Route::get('/', [OwnerDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/export', [OwnerDashboardController::class, 'export'])
+            ->name('export');
+
+        Route::get('/export-pdf', [OwnerDashboardController::class, 'exportPdf'])
+            ->name('export.pdf');
+        
+        Route::get('/calendar', [OwnerCalendarController::class, 'index'])
+            ->name('calendar');
+            
+        Route::get('/report', [OwnerDashboardController::class, 'generateReport'])
+            ->name('report');
+
+        Route::post('/import-ical', [OwnerDashboardController::class, 'importIcal'])
+            ->name('import.ical');
+
+        Route::post('/import-availability', [OwnerDashboardController::class, 'importAvailability'])
+            ->name('import.availability');
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +93,7 @@ Route::middleware('auth')->group(function () {
     ->middleware('role:admin')
     ->group(function () {
 
-        Route::get('/', [DashboardController::class, 'index'])
+        Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('admin.dashboard');
 
         // User Management
@@ -79,6 +107,28 @@ Route::middleware('auth')->group(function () {
         Route::post('/rooms', [RoomController::class, 'store'])->name('admin.rooms.store');
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('admin.rooms.update');
         Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('admin.rooms.destroy');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Staff Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('staff')
+    ->name('staff.')
+    ->middleware(['auth','role:staff'])
+    ->group(function () {
+
+        Route::get('/', [StaffDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Bookings
+        Route::resource('bookings', BookingController::class);
+
+        // Calendar
+        Route::get('/calendar', [CalendarController::class, 'index'])
+            ->name('calendar');
+
     });
 });
 
