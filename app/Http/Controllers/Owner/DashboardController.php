@@ -108,9 +108,74 @@ class DashboardController extends Controller
             }
         }
 
+        // =========================================================
+        // ===== ROOM PERFORMANCE ANALYTICS =====
+        // =========================================================
+
+        $roomPerformance = Booking::selectRaw('
+                room_id,
+                COUNT(*) as total_bookings,
+                SUM(total_price) as total_revenue
+            ')
+            ->with('room')
+            ->groupBy('room_id')
+            ->orderByDesc('total_revenue')
+            ->get();
+
+        // ===== TOP ROOM =====
+        $topRevenueRoom = $roomPerformance->first();
+
+        // ===== MOST BOOKED ROOM =====
+        $mostBookedRoom = $roomPerformance
+            ->sortByDesc('total_bookings')
+            ->first();
+
+        // ===== LOWEST PERFORMANCE ROOM =====
+        $lowestRoom = $roomPerformance
+            ->sortBy('total_revenue')
+            ->first();
+
+        // =========================================================
+        // ===== PEAK / LOW SEASON DETECTION =====
+        // =========================================================
+
+        $monthlyBookingCounts = Booking::selectRaw('
+                MONTH(check_in_date) as month,
+                COUNT(*) as total
+            ')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // ===== PEAK MONTH =====
+        $peakMonth = $monthlyBookingCounts
+            ->sortByDesc('total')
+            ->first();
+
+        // ===== LOW MONTH =====
+        $lowMonth = $monthlyBookingCounts
+            ->sortBy('total')
+            ->first();
+
+        // Convert month number to month name
+        $peakMonthName = $peakMonth
+            ? Carbon::create()->month($peakMonth->month)->format('F')
+            : 'N/A';
+
+        $lowMonthName = $lowMonth
+            ? Carbon::create()->month($lowMonth->month)->format('F')
+            : 'N/A';
+        
         // ===== AI-STYLE INSIGHTS =====
         // ===== SMARTER INSIGHTS =====
         $insights = [];
+        $recommendations = [];
+
+        $insights[] =
+        "Peak booking month detected in {$peakMonthName}.";
+
+        $insights[] =
+        "Lowest booking activity detected in {$lowMonthName}.";
 
         // ===== MONTH-TO-MONTH BOOKING COMPARISON =====
         $currentMonth = Carbon::now()->month;
@@ -165,6 +230,46 @@ class DashboardController extends Controller
             }
         }
 
+        // =========================================================
+        // ===== SMART RECOMMENDATIONS =====
+        // =========================================================
+
+        // ===== LOW OCCUPANCY =====
+        if ($occupancyRate < 40) {
+            $recommendations[] =
+                "Consider promotional campaigns during {$lowMonthName} to improve occupancy.";
+        }
+
+        // ===== HIGH OCCUPANCY =====
+        if ($occupancyRate > 70) {
+            $recommendations[] =
+                "High demand detected. Consider premium pricing during {$peakMonthName}.";
+        }
+
+        // ===== TOP ROOM =====
+        if ($topRevenueRoom) {
+            $recommendations[] =
+                "{$topRevenueRoom->room->name} is generating the highest revenue. Prioritize marketing for this room.";
+        }
+
+        // ===== LOWEST ROOM =====
+        if ($lowestRoom) {
+            $recommendations[] =
+                "{$lowestRoom->room->name} shows lower performance. Consider discounts or bundled packages.";
+        }
+
+        // ===== REVENUE FORECAST =====
+        if ($nextRevenueForecast < ($totalRevenue / 6)) {
+            $recommendations[] =
+                "Forecast indicates slower future revenue growth. Consider increasing promotional activities.";
+        }
+
+        // ===== EMPTY CASE =====
+        if (empty($recommendations)) {
+            $recommendations[] =
+                "Current business performance appears stable.";
+        }
+
         // ===== EDGE CASE =====
         if (empty($insights)) {
             $insights[] = "Not enough data available for insights.";
@@ -188,11 +293,19 @@ class DashboardController extends Controller
             'revenueForecast' => $revenueForecast,
 
             'insights' => $insights,
+            'recommendations' => $recommendations,
+
+            'topRevenueRoom' => $topRevenueRoom,
+            'mostBookedRoom' => $mostBookedRoom,
+            'lowestRoom' => $lowestRoom,
 
             'nextBookingForecast' => $nextBookingForecast,
             'nextRevenueForecast' => $nextRevenueForecast,
 
             'rooms' => $rooms, 
+
+            'peakMonthName' => $peakMonthName,
+            'lowMonthName' => $lowMonthName,
         ]);
     }
 
@@ -348,6 +461,30 @@ class DashboardController extends Controller
         return $pdf->download(
             'booking_report_' . $request->start_date . '_to_' . $request->end_date . '.pdf'
         );
+    }
+
+    public function generateRoomReport(Request $request)
+    {
+        $roomId = $request->room_id;
+
+        $room = Room::findOrFail($roomId);
+
+        $bookings = Booking::where('room_id', $roomId)
+            ->latest()
+            ->get();
+
+        $totalBookings = $bookings->count();
+
+        $totalRevenue = $bookings->sum('total_price');
+
+        $pdf = Pdf::loadView('owner.reports.room_report', [
+            'room' => $room,
+            'bookings' => $bookings,
+            'totalBookings' => $totalBookings,
+            'totalRevenue' => $totalRevenue,
+        ]);
+
+        return $pdf->download($room->name . '_report.pdf');
     }
 
     public function importIcal(Request $request)

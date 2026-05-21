@@ -6,23 +6,33 @@
 
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
 :root {
-    --nav-gradient: linear-gradient(180deg, #0f172a, #020617);
+    --nav-gradient: linear-gradient(180deg, #6B4F3A, #4A3728);
     --nav-border: rgba(255,255,255,0.08);
-    --nav-height: 64px;
+    --nav-height: 72px;
+
+    --bg-main: #F5EEDD;
+    --card-bg: #F9F5EC;
+
+    --text-primary: #4A3728;
+    --text-secondary: #7A6855;
+
+    --olive: #556B2F;
 }
 
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 html, body {
     margin: 0;
     padding: 0;
-    background: #f4f6f8;
+    background: var(--bg-main);
+    color: var(--text-primary);
 }
 
 .wrapper {
@@ -31,25 +41,26 @@ html, body {
 }
 
 .sidebar {
-    width: 240px;
+    width: 260px;
     min-height: 100vh;
-    background: linear-gradient(180deg, #0f172a, #020617);
+    background: rgba(74,55,40,0.92);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid rgba(255,255,255,0.06);
     color: #e5e7eb;
 }
 
 .sidebar-brand {
     height: var(--nav-height);
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    background: var(--nav-gradient);
-    border-bottom: 1px solid var(--nav-border);
-}
 
-.brand-logo {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .sidebar-menu {
@@ -60,21 +71,46 @@ html, body {
 
 .menu-item {
     display: flex;
+
     align-items: center;
-    padding: 12px 20px;
-    color: #cbd5f5;
+
+    gap: 12px;
+
+    margin: 8px 14px;
+
+    padding: 14px 18px;
+
+    border-radius: 18px;
+
+    color: #F5EEDD;
+
     text-decoration: none;
-    font-size: 14px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition: all 0.25s ease;
 }
 
 .menu-item:hover {
-    background: rgba(255,255,255,0.06);
+    background: rgba(245,238,221,0.08);
+
     color: #ffffff;
+
+    transition: 0.2s ease;
 }
 
 .menu-item.active {
-    background: #1e40af;
-    color: #ffffff;
+    background: #F5EEDD;
+
+    color: #4A3728;
+
+    font-weight: 600;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+
+    transform: translateX(6px);
 }
 
 .main {
@@ -85,12 +121,20 @@ html, body {
 
 .topbar {
     height: var(--nav-height);
+
     display: flex;
+
+    justify-content: flex-end;
+
     align-items: center;
-    justify-content: right;
-    padding: 0 24px;
-    background: var(--nav-gradient);
-    border-bottom: 1px solid var(--nav-border);
+
+    padding: 0 28px;
+
+    background: rgba(74,55,40,0.92);
+
+    backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .user-info {
@@ -101,28 +145,47 @@ html, body {
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+
+    height: 40px;
+
     border-radius: 50%;
-    background: #2563eb;
+
+    background: rgba(255,255,255,0.12);
+
+    color: #FFF9F0;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    font-weight: bold;
+
+    font-weight: 600;
+
+    border: 1px solid rgba(255,255,255,0.12);
 }
 
 .logout-btn {
-    background: linear-gradient(180deg, #0f172a, #020617);
+    background: rgba(245,238,221,0.12);
+
     color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    padding: 8px 16px;
+
+    border-radius: 14px;
+
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .logout-btn:hover {
-    background: #1e40af;
+    background: rgba(245,238,221,0.22);
 }
+
 
 .content {
     padding: 32px;
@@ -133,22 +196,24 @@ html, body {
 .add-btn {
     display: inline-block;
     margin-bottom: 16px;
-    padding: 8px 14px;
-    background: #2563eb;
+    padding: 10px 18px;
+    background: #8b5e3c;
     color: white;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 14px;
     font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
 .add-btn:hover {
-    background: #1e40af;
+    background: #6f472c;
 }
 
 .booking-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: var(--card-bg);
     border-radius: 8px;
     overflow: hidden;
 }
@@ -171,32 +236,34 @@ html, body {
 }
 
 .edit-btn {
-    padding: 5px 10px;
-    background: #f59e0b;
+    padding: 8px 16px;
+    background: #8b5e3c;
     color: white;
     text-decoration: none;
-    border-radius: 4px;
-    font-size: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .delete-btn {
-    padding: 5px 10px;
-    background: #dc2626;
+    padding: 8px 16px;
+    background: #a06b43;
     color: white;
     border: none;
-    border-radius: 4px;
-    font-size: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .delete-btn:hover {
-    background: #b91c1c;
+    background: #70492e;
 }
 
 /* ===== FORM ===== */
 
 .form-card {
-    background: white;
+    background: var(--card-bg);
     padding: 24px;
     border-radius: 8px;
     max-width: 500px;
@@ -221,16 +288,18 @@ html, body {
 }
 
 .save-btn {
-    padding: 10px 16px;
-    background: #2563eb;
+    padding: 10px 18px;
+    background: #8b5e3c;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 14px;
     cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
 .save-btn:hover {
-    background: #1e40af;
+    background: #6f472c;
 }
 
 .modal-overlay
@@ -353,49 +422,6 @@ html, body {
     cursor: pointer;
     pointer-events: auto;
 }
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.dashboard-card {
-    padding: 25px;
-    border-radius: 12px;
-    color: #fff;
-}
-
-.dashboard-card h2 {
-    font-size: 32px;
-    margin-top: 10px;
-}
-
-/* Colors (match your system vibe) */
-.dashboard-card.blue {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-
-.dashboard-card.green {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
-
-.dashboard-card.orange {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-.dashboard-card.purple {
-    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-}
-
-.dashboard-placeholder {
-    border: 2px dashed #ccc;
-    padding: 30px;
-    text-align: center;
-    border-radius: 12px;
-    color: #666;
-}
 </style>
 </head>
 
@@ -406,23 +432,28 @@ html, body {
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-brand">
-        <span class="brand-logo">IVMAS</span>
+        <img src="{{ asset('images/INNerpeaceLogoLogin.png') }}"
+        alt="IVMAS Logo"
+        style="height: 42px;">
     </div>
 
     <nav class="sidebar-menu">
 
         <a href="{{ route('staff.dashboard') }}"
-           class="menu-item {{ request()->is('staff') ? 'active' : '' }}">
+            class="menu-item {{ request()->is('staff') ? 'active' : '' }}">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             Dashboard
         </a>
 
         <a href="{{ route('staff.bookings.index') }}"
-           class="menu-item {{ request()->is('staff/bookings*') ? 'active' : '' }}">
+            class="menu-item {{ request()->is('staff/bookings*') ? 'active' : '' }}">
+            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
             Manage Bookings
         </a>
 
         <a href="{{ route('staff.calendar') }}"
             class="menu-item {{ request()->is('staff/calendar') ? 'active' : '' }}">
+            <i data-lucide="calendar-days" class="w-5 h-5"></i>
             Calendar
         </a>
 
@@ -445,7 +476,7 @@ html, body {
 
     </div>
 
-    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+    <form method="POST" action="{{ route('logout') }}" style="margin-left:10px;">
         @csrf
         <button type="submit" class="logout-btn">
             Logout
@@ -464,6 +495,10 @@ html, body {
 
 <!-- ===== PAGE SCRIPTS ===== -->
 @yield('scripts')
+
+<script>
+    lucide.createIcons();
+</script>
 
 </body>
 </html>

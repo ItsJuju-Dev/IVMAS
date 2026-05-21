@@ -4,23 +4,34 @@
 <meta charset="UTF-8">
 <title>@yield('title', 'Admin')</title>
 
+<script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
 :root {
-    --nav-gradient: linear-gradient(180deg, #0f172a, #020617);
+    --nav-gradient: linear-gradient(180deg, #6B4F3A, #4A3728);
     --nav-border: rgba(255,255,255,0.08);
-    --nav-height: 64px;
+    --nav-height: 72px;
+
+    --bg-main: #F5EEDD;
+    --card-bg: #F9F5EC;
+
+    --text-primary: #4A3728;
+    --text-secondary: #7A6855;
+
+    --olive: #556B2F;
 }
 
 /* ================= RESET ================= */
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 html, body {
     margin: 0;
     padding: 0;
-    background: #f4f6f8;
+    background: var(--bg-main);
+    color: var(--text-primary);
 }
 
 /* ================= LAYOUT ================= */
@@ -31,26 +42,27 @@ html, body {
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-    width: 240px;
+    width: 260px;
     min-height: 100vh;
-    background: linear-gradient(180deg, #0f172a, #020617);
+    background: rgba(74,55,40,0.92);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid rgba(255,255,255,0.06);
     color: #e5e7eb;
 }
 
 /* Brand */
 .sidebar-brand {
     height: var(--nav-height);
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    background: var(--nav-gradient);
-    border-bottom: 1px solid var(--nav-border);
-}
 
-.brand-logo {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 /* Menu */
@@ -62,21 +74,46 @@ html, body {
 
 .menu-item {
     display: flex;
+
     align-items: center;
-    padding: 12px 20px;
-    color: #cbd5f5;
+
+    gap: 12px;
+
+    margin: 8px 14px;
+
+    padding: 14px 18px;
+
+    border-radius: 18px;
+
+    color: #F5EEDD;
+
     text-decoration: none;
-    font-size: 14px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition: all 0.25s ease;
 }
 
 .menu-item:hover {
-    background: rgba(255,255,255,0.06);
+    background: rgba(245,238,221,0.08);
+
     color: #ffffff;
+
+    transition: 0.2s ease;
 }
 
 .menu-item.active {
-    background: #1e40af;
-    color: #ffffff;
+    background: #F5EEDD;
+
+    color: #4A3728;
+
+    font-weight: 600;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+
+    transform: translateX(6px);
 }
 
 /* ================= MAIN ================= */
@@ -89,12 +126,20 @@ html, body {
 /* ================= TOP BAR ================= */
 .topbar {
     height: var(--nav-height);
+
     display: flex;
+
+    justify-content: flex-end;
+
     align-items: center;
-    justify-content: right;
-    padding: 0 24px;
-    background: var(--nav-gradient);
-    border-bottom: 1px solid var(--nav-border);
+
+    padding: 0 28px;
+
+    background: rgba(74,55,40,0.92);
+
+    backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .user-info {
@@ -105,27 +150,45 @@ html, body {
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+
+    height: 40px;
+
     border-radius: 50%;
-    background: #2563eb;
+
+    background: rgba(255,255,255,0.12);
+
+    color: #FFF9F0;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    font-weight: bold;
+
+    font-weight: 600;
+
+    border: 1px solid rgba(255,255,255,0.12);
 }
 
 .logout-btn {
-    background: linear-gradient(180deg, #0f172a, #020617);
+    background: rgba(245,238,221,0.12);
+
     color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    padding: 8px 16px;
+
+    border-radius: 14px;
+
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .logout-btn:hover {
-    background: #1e40af;
+    background: rgba(245,238,221,0.22);
 }
 
 /* ================= CONTENT ================= */
@@ -142,23 +205,31 @@ html, body {
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <span class="brand-logo">IVMAS</span>
+            <img src="{{ asset('images/INNerpeaceLogoLogin.png') }}"
+            alt="IVMAS Logo"
+            style="height: 42px;">
         </div>
 
         <nav class="sidebar-menu">
             <a href="{{ route('admin.dashboard') }}"
-               class="menu-item {{ request()->is('admin') ? 'active' : '' }}">
-                Dashboard
+               class="menu-item {{ request()->is('admin') ? 'active' : '' }} flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+
+                    Dashboard
             </a>
 
             <a href="{{ route('admin.users.index') }}"
-               class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }}">
-                User Management
+               class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }} flex items-center gap-3">
+                <i data-lucide="users" class="w-5 h-5"></i>
+
+                    User Management
             </a>
 
             <a href="{{ route('admin.rooms.index') }}"
-               class="menu-item {{ request()->is('admin/rooms*') ? 'active' : '' }}">
-                Room Management
+               class="menu-item {{ request()->is('admin/rooms*') ? 'active' : '' }} flex items-center gap-3">
+                <i data-lucide="bed-double" class="w-5 h-5"></i>
+
+                    Room Management
             </a>
         </nav>
     </aside>
@@ -173,7 +244,7 @@ html, body {
                 <span>Admin User</span>
             </div>
 
-            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+            <form method="POST" action="{{ route('logout') }}" style="margin-left:10px;">
                 @csrf
                 <button type="submit" class="logout-btn">
                     Logout
@@ -188,6 +259,10 @@ html, body {
 
     </div>
 </div>
+
+<script>
+    lucide.createIcons();
+</script>
 
 </body>
 </html>

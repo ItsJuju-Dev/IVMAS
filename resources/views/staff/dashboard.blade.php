@@ -4,40 +4,228 @@
 
 @section('content')
 
-<h2 class="page-title">Staff Dashboard</h2>
+<style>
+/* ================= DASHBOARD ================= */
 
-<div class="dashboard-grid">
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+}
 
-    <!-- Total Bookings -->
-    <div class="dashboard-card blue">
-        <p>Total Bookings</p>
-        <h2>{{ $totalBookings }}</h2>
+.stat-card {
+    position: relative;
+
+    background: #F9F5EC;
+
+    border-radius: 28px;
+
+    padding: 28px;
+
+    min-height: 140px;
+
+    overflow: hidden;
+
+    border: 1px solid #E8DDCC;
+
+    box-shadow:
+        0 10px 30px rgba(74,55,40,0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 16px 40px rgba(74,55,40,0.12);
+}
+
+.stat-icon {
+    position: absolute;
+
+    top: 28px;
+    right: 28px;
+
+    color: #556B2F;
+
+    opacity: 0.16;
+}
+
+.stat-label {
+    font-size: 15px;
+
+    color: #7A6855;
+
+    margin-bottom: 14px;
+}
+
+.stat-value {
+    font-size: 56px;
+
+    font-weight: 700;
+
+    color: #4A3728;
+}
+
+/* ================= HEADER ================= */
+
+.section-header {
+    margin-bottom: 36px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    font-size: 54px;
+
+    color: #4A3728;
+}
+
+/* ================= EMPTY STATE ================= */
+
+.empty-state {
+    margin-top: 36px;
+
+    background: #F9F5EC;
+
+    border-radius: 28px;
+
+    border: 2px dashed #DDD2BF;
+
+    padding: 42px;
+
+    text-align: center;
+
+    color: #7A6855;
+
+    box-shadow:
+        0 10px 30px rgba(74,55,40,0.05);
+}
+</style>
+
+<div class="section-header">
+    <h2>Staff Dashboard</h2>
+</div>
+
+<div class="stats-grid">
+
+    <!-- TOTAL BOOKINGS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="clipboard-list"
+               style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Total Bookings
+        </div>
+
+        <div class="stat-value">
+            {{ $totalBookings }}
+        </div>
+
     </div>
 
-    <!-- Today Check-ins -->
-    <div class="dashboard-card green">
-        <p>Today's Check-ins</p>
-        <h2>{{ $todayCheckIns }}</h2>
+    <!-- TODAY CHECK-INS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="log-in"
+               style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Today's Check-ins
+        </div>
+
+        <div class="stat-value">
+            {{ $todayCheckIns }}
+        </div>
+
     </div>
 
-    <!-- Today Check-outs -->
-    <div class="dashboard-card orange">
-        <p>Today's Check-outs</p>
-        <h2>{{ $todayCheckOuts }}</h2>
+    <!-- TODAY CHECK-OUTS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="log-out"
+               style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Today's Check-outs
+        </div>
+
+        <div class="stat-value">
+            {{ $todayCheckOuts }}
+        </div>
+
     </div>
 
-    <!-- Occupied Rooms -->
-    <div class="dashboard-card purple">
-        <p>Occupied Rooms</p>
-        <h2>{{ $occupiedRooms }} / {{ $totalRooms }}</h2>
+    <!-- OCCUPIED ROOMS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="bed-double"
+               style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Occupied Rooms
+        </div>
+
+        <div class="stat-value">
+            {{ $occupiedRooms }} / {{ $totalRooms }}
+        </div>
+
     </div>
 
 </div>
 
+<div class="empty-state">
 
-<!-- Optional Section -->
-<div class="dashboard-placeholder">
-    <p>More analytics and insights can be added here (e.g., recent bookings, revenue, occupancy trends).</p>
+    <h3 style="margin-top:0;color:#4A3728;">
+        Quick Actions
+    </h3>
+
+    <div style="
+        display:flex;
+        gap:16px;
+        justify-content:center;
+        flex-wrap:wrap;
+        margin-top:24px;
+    ">
+
+        <a href="{{ route('staff.bookings.index') }}"
+           style="
+            background:#5B4332;
+            color:white;
+            padding:12px 22px;
+            border-radius:14px;
+            text-decoration:none;
+            font-weight:600;
+           ">
+            Manage Bookings
+        </a>
+
+        <a href="{{ route('staff.calendar') }}"
+           style="
+            background:#5B4332;
+            color:white;
+            padding:12px 22px;
+            border-radius:14px;
+            text-decoration:none;
+            font-weight:600;
+           ">
+            View Calendar
+        </a>
+
+    </div>
+
 </div>
 
 @endsection

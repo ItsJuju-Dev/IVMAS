@@ -5,47 +5,45 @@
 @section('content')
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-        }
-
         /* PAGE WRAPPER */
         .page {
-            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
         /* HEADER */
         .page-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .page-header h2 {
+        .page-header h1 {
             margin: 0;
-            font-size: 22px;
+            font-size: 58px;
+            font-weight: 700;
+            color: #4e3727;
+            line-height: 1;
         }
 
         .page-header p {
-            margin: 4px 0 0;
-            font-size: 14px;
-            color: #64748b;
+            margin: 0;
+            font-size: 18px;
+            color: #7b6a58;
         }
 
         /* ===== Action Buttons ===== */
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
-        /* Base button */
+        /* ===== Base Button ===== */
         .btn {
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 600;
             border: none;
             cursor: pointer;
@@ -53,50 +51,65 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease;
         }
 
-        /* Edit button */
+        /* ===== Main Theme Buttons ===== */
+        .btn-add,
         .btn-edit {
-            background: #2563eb;
-            color: #fff;
+            background: #6b4b35;
+            color: #ffffff;
         }
 
+        .btn-add:hover,
         .btn-edit:hover {
-            background: #1d4ed8;
+            background: #523826;
+            transform: translateY(-1px);
         }
 
-        /* Delete button */
+        /* ===== Delete Button ===== */
         .btn-delete {
-            background: #4b5563;
-            color: #fff;
+            background: #8b5e3c;
+            color: #ffffff;
         }
 
         .btn-delete:hover {
-            background: #374151;
+            background: #70492e;
+            transform: translateY(-1px);
         }
 
-        /* Add button */
-        .btn-add {
-            background: #008000 ;
-            color: #fff;
+        /* ===== Cancel Button ===== */
+        .btn-cancel {
+            background: #d8cfc2;
+            color: #4e3727;
         }
 
-        .btn-add:hover {
-            background: #3cb371 ;
+        .btn-cancel:hover {
+            background: #c8bba9;
+        }
+
+        .add-user-card {
+            display: flex;
+            align-items: center;
         }
 
         /* ADD USER FORM */
         .add-user-form {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            flex-wrap: wrap;
+            width: 100%;
         }
 
         .add-user-form input,
         .add-user-form select {
-            height: 34px;
-            padding: 6px 8px;
-            font-size: 13px;
+            height: 48px;
+            border-radius: 14px;
+            border: 1px solid #d8cfc2;
+            padding: 0 14px;
+            background: #fffdf9;
+            font-size: 14px;
         }
 
         .add-user-form button {
@@ -106,12 +119,14 @@
 
         /* CARD */
         .card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
+            background: #fdfaf5;
+            border-radius: 24px;
+            padding: 28px;
+            border: 1px solid #ece3d6;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
-        /* TABLE */
+        /* ===== TABLE ===== */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -119,18 +134,33 @@
         }
 
         thead {
-            background: #f1f5f9;
+            background: #f5efe6;
         }
 
-        th, td {
-            padding: 12px 10px;
+        th,
+        td {
+            padding: 18px 14px;
             text-align: left;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #ece3d6;
         }
 
         th {
-            font-weight: 600;
-            color: #334155;
+            font-weight: 700;
+            color: #4e3727;
+            font-size: 14px;
+        }
+
+        td {
+            color: #5f4b3a;
+        }
+
+        /* Hover Effect */
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f4ed;
         }
 
         /* ROLE BADGE */
@@ -175,10 +205,9 @@
         }
 
         .modal-content {
-            background: #fff;
-            padding: 24px;
-            width: 420px;
-            border-radius: 12px;
+            background: #fdfaf5;
+            border-radius: 24px;
+            padding: 32px;
         }
 
         .form-group {
@@ -204,17 +233,18 @@
         }
 
     </style>
-</head>
-<body>
+
+
 
 <div class="page">
 
     <!-- HEADER -->
     <div class="page-header">
-        <div>
-            <h2>User Management</h2>
-            <p>Manage system users and assign roles.</p>
-        </div>
+        <h1>User Management</h1>
+        <p>Manage system users and assign roles.</p>
+    </div>
+
+    <div class="card add-user-card">
 
         <form action="{{ route('admin.users.store') }}" method="POST" class="add-user-form">
             @csrf
@@ -305,8 +335,9 @@
                     </div>
 
                     <div class="modal-actions">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn btn-edit">Update</button>
+                        <button type="button" class="btn btn-cancel"
+                        onclick="closeEditModal()">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -324,8 +355,9 @@
                     @method('DELETE')
 
                     <div class="modal-actions">
-                        <button type="submit" class="btn btn-deletegit">Delete</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                        <button type="submit" class="btn btn-delete">Delete</button>
+                        <button type="button" class="btn btn-cancel"
+                        onclick="closeDeleteModal()">Cancel</button>
                     </div>
                 </form>
             </div>

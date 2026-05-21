@@ -5,26 +5,32 @@
 @section('content')
 
 <style>
-body {
-    background: #f4f6f8;
-    font-family: Arial, sans-serif;
-}
-
 .page-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    align-items: flex-start;
+    margin-bottom: 28px;
 }
 
 .page-header h2 {
     margin: 0;
+    font-size: 56px;
+    font-weight: 700;
+    color: #4b362b;
+}
+
+.page-header p {
+    margin: 0;
+    font-size: 18px;
+    color: #7b6a58;
 }
 
 .card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
+    background: #f7f4ee;
+    border-radius: 28px;
+    padding: 28px;
+    border: 1px solid #ece4d8;
+    margin-bottom: 24px;
 }
 
 table {
@@ -33,53 +39,81 @@ table {
 }
 
 th, td {
-    padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 20px 14px;
+    border-bottom: 1px solid #e7ded2;
     text-align: left;
 }
 
 th {
-    background: #f1f5f9;
+    background: #efe9df;
+    color: #4b362b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+td {
+    color: #5c4638;
+    font-size: 15px;
 }
 
 .badge {
-    padding: 4px 10px;
+    padding: 6px 14px;
     border-radius: 999px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 700;
 }
 
+.badge.active,
 .badge.available {
-    background: #dcfce7;
-    color: #166534;
+    background: #d7f0dd;
+    color: #2f6b3d;
 }
 
+.badge.maintenance {
+    background: #f8e7c9;
+    color: #9b6500;
+}
+
+.badge.inactive,
 .badge.unavailable {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #f5d7d7;
+    color: #8b2f2f;
 }
 
 .btn {
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 10px 18px;
+    border-radius: 14px;
     border: none;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+    text-decoration: none;
 }
 
-.btn-primary {
-    background: #2563eb;
-    color: #fff;
+.btn-add,
+.btn-edit {
+    background: #6b4b35;
+    color: white;
 }
 
-.btn-danger {
-    background: #374151;
-    color: #fff;
+.btn-add:hover,
+.btn-edit:hover {
+    background: #5a3f2d;
 }
 
-.btn-success {
-    background: #16a34a;
-    color: #fff;
+.btn-delete {
+    background: #8b5e3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #734d31;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
 }
 
 .modal {
@@ -92,23 +126,57 @@ th {
 }
 
 .modal-content {
-    background: #fff;
-    padding: 24px;
-    width: 420px;
-    border-radius: 10px;
+    background: #f7f4ee;
+    padding: 32px;
+    width: 440px;
+    border-radius: 24px;
+    border: 1px solid #e9dfd2;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #4b362b;
+    font-size: 24px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #d9cbb8;
+    background: #fffdf9;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b362b;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
 }
 </style>
-</head>
-
-<body>
 
 <div class="page-header">
     <div>
         <h2>Room Management</h2>
-        <p style="color:#64748b">Manage villa rooms for direct bookings.</p>
+        <p>Manage villa rooms for direct bookings.</p>
     </div>
 
-    <button class="btn btn-success" onclick="openAddModal()">Add Room</button>
+    <button class="btn btn-add" onclick="openAddModal()">Add Room</button>
 </div>
 
 <div class="card">
@@ -136,22 +204,27 @@ th {
                     </span>
                 </td>
                 <td>
-                    <button class="btn btn-primary"
-                        onclick="openEditModal(
-                            {{ $room->id }},
-                            '{{ $room->name }}',
-                            '{{ $room->type }}',
-                            {{ $room->capacity }},
-                            {{ $room->base_price }},
-                            '{{ $room->status }}'
-                        )">
-                        Edit
-                    </button>
+                    <div class="action-buttons">
+
+                        <button class="btn btn-edit"
+                            onclick="openEditModal(
+                                {{ $room->id }},
+                                '{{ $room->name }}',
+                                '{{ $room->type }}',
+                                {{ $room->capacity }},
+                                {{ $room->base_price }},
+                                '{{ $room->status }}'
+                            )">
+                            Edit
+                        </button>
+
                         <button
-                            class="btn btn-danger"
+                            class="btn btn-delete"
                             onclick="openDeleteRoomModal({{ $room->id }}, '{{ $room->name }}')">
                             Delete
                         </button>
+
+                    </div>
                 </td>
             </tr>
         @endforeach
@@ -165,19 +238,38 @@ th {
         <h3>Add Room</h3>
         <form method="POST" action="{{ route('admin.rooms.store') }}">
             @csrf
-            <input name="name" placeholder="Room Name" required><br><br>
-            <input name="type" placeholder="Room Type" required><br><br>
-            <input type="number" name="capacity" placeholder="Capacity" required><br><br>
-            <input type="number" name="base_price" placeholder="Base Price" required><br><br>
+            <div class="form-group">
+                <label>Room Name</label>
+                <input name="name" required>
+            </div>
 
-            <select name="status" required>
-            <option value="active">Active</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="inactive">Inactive</option>
-            </select><br><br>
+            <div class="form-group">
+                <label>Room Type</label>
+                <input name="type" required>
+            </div>
 
-            <button class="btn btn-success">Save</button>
-            <button type="button" class="btn" onclick="closeAddModal()">Cancel</button>
+            <div class="form-group">
+                <label>Capacity</label>
+                <input type="number" name="capacity" required>
+            </div>
+
+            <div class="form-group">
+                <label>Base Price</label>
+                <input type="number" name="base_price" required>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select name="status" required>
+                    <option value="active">Active</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <button class="btn btn-add">Save</button>
+            <button type="button" class="btn btn-delete" onclick="closeAddModal()">Cancel</button>
         </form>
     </div>
 </div>
@@ -190,19 +282,46 @@ th {
             @csrf
             @method('PUT')
 
-            <input id="edit-name" name="name" required><br><br>
-            <input id="edit-type" name="type" required><br><br>
-            <input id="edit-capacity" type="number" name="capacity" required><br><br>
-            <input id="edit-price" type="number" name="base_price" required><br><br>
+            <div class="form-group">
+                <label>Room Name</label>
+                <input id="edit-name" name="name" required>
+            </div>
 
-            <select id="edit-status" name="status" required>
-            <option value="active">Active</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="inactive">Inactive</option>
-            </select><br><br>
+            <div class="form-group">
+                <label>Room Type</label>
+                <input id="edit-type" name="type" required>
+            </div>
 
-            <button class="btn btn-primary">Update</button>
-            <button type="button" class="btn" onclick="closeEditModal()">Cancel</button>
+            <div class="form-group">
+                <label>Capacity</label>
+                <input id="edit-capacity" type="number" name="capacity" required>
+            </div>
+
+            <div class="form-group">
+                <label>Base Price</label>
+                <input id="edit-price" type="number" name="base_price" required>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select id="edit-status" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-edit">Update</button>
+
+                <button
+                    type="button"
+                    class="btn btn-delete"
+                    onclick="closeEditModal()">
+                    Cancel
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -218,10 +337,10 @@ th {
             @method('DELETE')
 
             <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-                <button type="submit" class="btn btn-danger">
+                <button type="submit" class="btn btn-delete">
                     Delete
                 </button>
-                <button type="button" class="btn" onclick="closeDeleteRoomModal()">
+                <button type="button" class="btn btn-edit" onclick="closeDeleteRoomModal()">
                     Cancel
                 </button>
             </div>

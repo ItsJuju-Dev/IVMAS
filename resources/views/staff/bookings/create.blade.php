@@ -8,6 +8,35 @@
 </div>
 @endif
 
+<style>
+.secondary-btn
+{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 20px;
+
+    border-radius:14px;
+
+    background:#D8CCBC;
+
+    color:#4A3728;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:0.2s ease;
+}
+
+.secondary-btn:hover
+{
+    background:#C9B9A5;
+}
+</style>
+
 <h2 class="page-title">Add Booking</h2>
 
 <form method="POST" action="{{ route('staff.bookings.store') }}" class="form-card">
@@ -51,9 +80,17 @@
         <input type="date" name="check_out_date" required>
     </div>
 
+    <div style="display:flex; gap:12px; margin-top:20px;">
+
     <button type="submit" class="save-btn">
         Save Booking
     </button>
+
+    <a href="{{ route('staff.bookings.index') }}" class="secondary-btn">
+        Cancel
+    </a>
+
+    </div>
 
 </form>
 

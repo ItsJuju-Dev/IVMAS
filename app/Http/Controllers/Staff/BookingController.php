@@ -41,8 +41,8 @@ class BookingController extends Controller
         'guest_name' => 'required|string|max:255',
         'room_id' => 'required|exists:rooms,id',
         'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|after_or_equal:check_in_date'
-        'status' => 'required|string'
+        'check_out_date' => 'required|date|after_or_equal:check_in_date',
+        'status' => 'required|string',
     ]);
 
     // Check for overlapping bookings

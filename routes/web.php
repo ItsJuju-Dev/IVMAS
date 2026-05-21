@@ -68,6 +68,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/report', [OwnerDashboardController::class, 'generateReport'])
             ->name('report');
 
+        Route::get('/report-room', [OwnerDashboardController::class, 'generateRoomReport'])
+            ->name('report.room');
+
         Route::post('/import-ical', [OwnerDashboardController::class, 'importIcal'])
             ->name('import.ical');
 

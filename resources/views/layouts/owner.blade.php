@@ -7,26 +7,42 @@
 <!-- ===== LIBRARIES ===== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root {
-    --nav-gradient: linear-gradient(180deg, #0f172a, #020617);
+    --nav-gradient: linear-gradient(180deg, #4A3728, #2F241B);
+
     --nav-border: rgba(255,255,255,0.08);
-    --nav-height: 64px;
+
+    --bg-main: #F5EEDD;
+    --bg-card: #FFF9F0;
+
+    --text-primary: #4A3728;
+    --text-secondary: #7A6757;
+
+    --shadow-soft: 0 8px 30px rgba(74,55,40,0.10);
+
+    --nav-height: 72px;
 }
 
 /* ===== RESET ===== */
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 html, body {
     margin: 0;
     padding: 0;
-    background: #f4f6f8;
+    background: var(--bg-main);
+    color: var(--text-primary);
 }
 
 /* ===== LAYOUT ===== */
@@ -37,46 +53,90 @@ html, body {
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-    width: 240px;
+    width: 260px;
     min-height: 100vh;
-    background: var(--nav-gradient);
+    background: rgba(74,55,40,0.92);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid rgba(255,255,255,0.06);
     color: #e5e7eb;
 }
 
 .sidebar-brand {
     height: var(--nav-height);
+
     display: flex;
+
     align-items: center;
-    padding: 0 20px;
-    border-bottom: 1px solid var(--nav-border);
+
+    justify-content: center;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-.brand-logo {
-    font-size: 20px;
-    font-weight: 700;
+.sidebar-logo {
+    height: 52px;
+    width: auto;
+
+    object-fit: contain;
+
+    transition: 0.25s ease;
+}
+
+.sidebar-logo:hover {
+    transform: scale(1.03);
 }
 
 /* ===== MENU ===== */
 .sidebar-menu {
     display: flex;
     flex-direction: column;
+    padding-top: 18px;
 }
 
 .menu-item {
-    padding: 12px 20px;
-    color: #cbd5e1;
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 8px 14px;
+
+    padding: 14px 18px;
+
+    border-radius: 18px;
+
+    color: #F5EEDD;
+
     text-decoration: none;
-    font-size: 14px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition: all 0.25s ease;
 }
 
 .menu-item:hover {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.08);
+
+    transform: translateX(4px);
+
     color: #fff;
 }
 
 .menu-item.active {
-    background: #1e40af;
-    color: #fff;
+    background: #F5EEDD;
+
+    color: #4A3728;
+
+    font-weight: 600;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+
+    transform: translateX(6px);
 }
 
 /* ===== MAIN ===== */
@@ -89,12 +149,20 @@ html, body {
 /* ===== TOPBAR ===== */
 .topbar {
     height: var(--nav-height);
+
     display: flex;
+
     justify-content: flex-end;
+
     align-items: center;
-    padding: 0 24px;
-    background: var(--nav-gradient);
-    border-bottom: 1px solid var(--nav-border);
+
+    padding: 0 28px;
+
+    background: rgba(74,55,40,0.92);
+
+    backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .user-info {
@@ -105,46 +173,120 @@ html, body {
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+
+    height: 40px;
+
     border-radius: 50%;
-    background: #2563eb;
+
+    background: rgba(255,255,255,0.12);
+
+    color: #FFF9F0;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    font-weight: bold;
+
+    font-weight: 600;
+
+    border: 1px solid rgba(255,255,255,0.12);
 }
 
 .logout-btn {
-    background: #020617;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+
+    color: #FFF9F0;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    padding: 10px 16px;
+
+    border-radius: 14px;
+
     cursor: pointer;
+
+    font-weight: 600;
+
+    transition: all 0.25s ease;
 }
 
 .logout-btn:hover {
-    background: #1e40af;
+    background: rgba(255,255,255,0.16);
+
+    transform: translateY(-2px);
 }
 
 /* ===== CONTENT ===== */
 .content {
-    padding: 24px;
+    padding: 32px;
+
+    max-width: 1600px;
 }
 
 /* ===== COMMON UI ===== */
 .page-title {
-    font-size: 22px;
-    margin-bottom: 20px;
+    font-size: 38px;
+
+    font-family: 'Playfair Display', serif;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    margin-bottom: 28px;
+
+    letter-spacing: 0.5px;
 }
 
 /* ===== CARD ===== */
 .card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
+    background: var(--bg-card);
+
+    border-radius: 24px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #E8DDCC;
+
+    box-shadow: var(--shadow-soft);
+
+    transition: 0.2s ease;
+
+    transform: translateY(0);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 14px 40px rgba(74,55,40,0.14);
+}
+
+.card h3,
+.card h4 {
+    margin-top: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
+}
+
+.indicator-value,
+.kpi-value {
+    font-size: 42px;
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+    margin-top: 10px;
 }
 
 /* ===== GRID ===== */
@@ -168,7 +310,7 @@ html, body {
 
 /* ===== CHART ===== */
 .chart-card {
-    height: 320px;
+    height: 300px;
     display: flex;
     flex-direction: column;
 }
@@ -198,7 +340,6 @@ html, body {
 .indicator-delta.up { color: #16a34a; }
 .indicator-delta.down { color: #dc2626; }
 
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 
 .fc-daygrid-event {
     z-index: 10;
@@ -253,7 +394,6 @@ html, body {
     display: none;
 }
 </style>
-</style>
 </head>
 
 <body>
@@ -262,20 +402,28 @@ html, body {
 
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <span class="brand-logo">IVMAS</span>
+       <div class="sidebar-brand">
+            <img src="{{ asset('images/INNerpeaceLogoLogin.png') }}"
+                alt="IVMAS Logo"
+                class="sidebar-logo">
         </div>
 
         <nav class="sidebar-menu">
 
             <a href="{{ route('owner.dashboard') }}"
-               class="menu-item {{ request()->is('owner/dashboard') ? 'active' : '' }}">
-                Dashboard
+            class="menu-item {{ request()->is('owner') ? 'active' : '' }} flex items-center gap-3">
+
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+
+                <span>Dashboard</span>
             </a>
 
             <a href="{{ route('owner.calendar') }}"
-               class="menu-item {{ request()->is('owner/calendar') ? 'active' : '' }}">
-                Calendar
+            class="menu-item {{ request()->is('owner/calendar') ? 'active' : '' }} flex items-center gap-3">
+
+                <i data-lucide="calendar-days" class="w-5 h-5"></i>
+
+                <span>Calendar</span>
             </a>
 
         </nav>
@@ -307,6 +455,8 @@ html, body {
 
 <!-- ===== PAGE SCRIPTS ===== -->
 @yield('scripts')
-
+<script>
+    lucide.createIcons();
+</script>
 </body>
 </html>

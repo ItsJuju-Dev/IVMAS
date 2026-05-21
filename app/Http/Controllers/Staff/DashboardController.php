@@ -17,13 +17,10 @@ class DashboardController extends Controller
 
                 'totalBookings' => Booking::count(),
 
-                // ✅ FIXED
                 'todayCheckIns' => Booking::whereDate('check_in_date', $today)->count(),
 
-                // ✅ FIXED
                 'todayCheckOuts' => Booking::whereDate('check_out_date', $today)->count(),
 
-                // ✅ FIXED
                 'occupiedRooms' => Booking::where('check_in_date', '<=', $today)
                     ->where('check_out_date', '>=', $today)
                     ->count(),

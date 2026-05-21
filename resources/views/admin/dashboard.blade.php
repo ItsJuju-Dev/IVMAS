@@ -5,93 +5,201 @@
 @section('content')
 
 <style>
-/* ================= DASHBOARD STATS ================= */
+/* ================= DASHBOARD ================= */
 
 .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
 }
 
 .stat-card {
-    border-radius: 14px;
-    padding: 32px;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 160px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+
+    background: #F9F5EC;
+
+    border-radius: 28px;
+
+    padding: 28px;
+
+    min-height: 140px;
+
+    overflow: hidden;
+
+    border: 1px solid #E8DDCC;
+
+    box-shadow:
+        0 10px 30px rgba(74,55,40,0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 16px 40px rgba(74,55,40,0.12);
+}
+
+.stat-icon {
+    position: absolute;
+
+    top: 28px;
+    right: 28px;
+
+    color: #556B2F;
+
+    opacity: 0.16;
 }
 
 .stat-label {
-    font-size: 14px;
-    opacity: 0.85;
-    margin-bottom: 6px;
+    font-size: 15px;
+
+    color: #7A6855;
+
+    margin-bottom: 14px;
 }
 
 .stat-value {
-    font-size: 36px;
+    font-size: 56px;
+
     font-weight: 700;
+
+    color: #4A3728;
 }
 
-/* Color variants */
-.stat-users {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-}
+/* ================= HEADER ================= */
 
-.stat-rooms {
-    background: linear-gradient(135deg, #059669, #047857);
-}
-
-/* ================= SECTION HEADER ================= */
 .section-header {
-    text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
 }
 
 .section-header h2 {
     margin: 0;
-    font-size: 22px;
+
+    font-size: 54px;
+
+    color: #4A3728;
 }
 
 .section-header p {
-    margin-top: 6px;
-    font-size: 14px;
-    color: #64748b;
+    margin-top: 10px;
+
+    color: #7A6855;
+
+    font-size: 16px;
 }
 
 /* ================= EMPTY STATE ================= */
+
 .empty-state {
-    margin-top: 32px;
-    padding: 24px;
+    margin-top: 36px;
+
+    background: #F9F5EC;
+
+    border-radius: 28px;
+
+    border: 2px dashed #DDD2BF;
+
+    padding: 42px;
+
     text-align: center;
-    border: 2px dashed #e5e7eb;
-    border-radius: 12px;
-    color: #64748b;
-    font-size: 14px;
+
+    color: #7A6855;
+
+    box-shadow:
+        0 10px 30px rgba(74,55,40,0.05);
 }
 </style>
 
 <div class="section-header">
-    <h2>IVMAS Admin Dashboard</h2>
-    <p>System overview and key statistics</p>
+    <h2>Admin Dashboard</h2>
+
+    <p>
+        Manage users, rooms, and operational settings.
+    </p>
 </div>
 
 <div class="stats-grid">
-    <div class="stat-card stat-users">
-        <div class="stat-label">Total Users</div>
-        <div class="stat-value">{{ $userCount }}</div>
+
+    <!-- USERS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="users" style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Total Users
+        </div>
+
+        <div class="stat-value">
+            {{ $userCount }}
+        </div>
+
     </div>
 
-    <div class="stat-card stat-rooms">
-        <div class="stat-label">Total Rooms</div>
-        <div class="stat-value">{{ $roomCount }}</div>
+    <!-- ROOMS -->
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i data-lucide="bed-double" style="width:64px; height:64px;"></i>
+        </div>
+
+        <div class="stat-label">
+            Total Rooms
+        </div>
+
+        <div class="stat-value">
+            {{ $roomCount }}
+        </div>
+
     </div>
+
 </div>
 
 <div class="empty-state">
-    <p>Additional system modules will appear here as the system expands.</p>
+
+    <h3 style="margin-top:0;color:#4A3728;">
+        Quick Actions
+    </h3>
+
+    <div style="
+        display:flex;
+        gap:16px;
+        justify-content:center;
+        flex-wrap:wrap;
+        margin-top:24px;
+    ">
+
+        <a href="{{ route('admin.users.index') }}"
+           style="
+            background:#5B4332;
+            color:white;
+            padding:12px 22px;
+            border-radius:14px;
+            text-decoration:none;
+            font-weight:600;
+           ">
+            Manage Users
+        </a>
+
+        <a href="{{ route('admin.rooms.index') }}"
+           style="
+            background:#5B4332;
+            color:white;
+            padding:12px 22px;
+            border-radius:14px;
+            text-decoration:none;
+            font-weight:600;
+           ">
+            Manage Rooms
+        </a>
+
+    </div>
+
 </div>
 
 @endsection
