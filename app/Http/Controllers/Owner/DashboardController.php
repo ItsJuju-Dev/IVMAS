@@ -576,32 +576,52 @@ class DashboardController extends Controller
 
     public function importAvailability(Request $request)
     {
+        $request->validate([
+            'room_id' => 'required|exists:rooms,id',
+            'ical_url' => 'required'
+        ]);
+
         $url = $request->ical_url;
 
-        $data = file_get_contents(public_path('importavailabilitytest.ics'));
+        // READ ICAL URL
+        $data = file_get_contents($url);
 
         $vcalendar = \Sabre\VObject\Reader::read($data);
 
-        $importedCount = 0; // ✅ ADD THIS
+        $importedCount = 0;
+
+        // SELECT ROOM
+        $room = \App\Models\Room::find($request->room_id);
+
+        if (!$room) {
+            return back()->with('error', 'Room not found');
+        }
 
         foreach ($vcalendar->VEVENT as $event) {
 
-            $start = \Carbon\Carbon::instance($event->DTSTART->getDateTime());
-            $end = \Carbon\Carbon::instance($event->DTEND->getDateTime());
+            $start = \Carbon\Carbon::instance(
+                $event->DTSTART->getDateTime()
+            );
+
+            $end = \Carbon\Carbon::instance(
+                $event->DTEND->getDateTime()
+            );
 
             $checkIn = $start->format('Y-m-d');
+
             $checkOut = $end->format('Y-m-d');
 
-            $room = \App\Models\Room::inRandomOrder()->first();
-            if (!$room) continue;
-
+            // DUPLICATE CHECK
             if (\App\Models\Booking::where('check_in_date', $checkIn)
                 ->where('check_out_date', $checkOut)
                 ->where('room_id', $room->id)
+                ->where('status', 'blocked')
                 ->exists()) {
+
                 continue;
             }
 
+            // CREATE BLOCKED ENTRY
             \App\Models\Booking::create([
                 'guest_name' => 'Unavailable (External)',
                 'room_id' => $room->id,
@@ -612,14 +632,19 @@ class DashboardController extends Controller
                 'source' => 'ical_block'
             ]);
 
-            $importedCount++; // ✅ ADD THIS
+            $importedCount++;
         }
 
+        // LOGGING
         \Log::info('iCal availability import completed', [
             'imported' => $importedCount,
-            'url' => $url
+            'url' => $url,
+            'room_id' => $room->id
         ]);
 
-        return back()->with('success', "$importedCount availability entries imported");
+        return back()->with(
+            'success',
+            "$importedCount availability entries imported successfully"
+        );
     }
 }

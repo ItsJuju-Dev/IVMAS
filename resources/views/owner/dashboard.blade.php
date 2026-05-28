@@ -5,7 +5,8 @@
 @section('content')
 
 <div class="content">
-    <h2 class="page-title">Owner Dashboard</h2>
+    <h2 class="page-title font-bold"
+    style="font-family: 'Poppins', sans-serif;">Owner Dashboard</h2>
 
     <!-- ===== KPI CARDS ===== -->
     <div class="kpi-grid">
@@ -264,7 +265,7 @@
 
     <div class="modal-box">
 
-        <h3>Generate Report</h3>
+        <h3>Generate Report by Date</h3>
 
         <form method="GET" action="{{ route('owner.report') }}">
 
@@ -369,13 +370,33 @@
 
             @csrf
 
+            <!-- SELECT ROOM -->
+            <div class="form-group">
+
+                <label>Select Room</label>
+
+                <select name="room_id" required>
+
+                    @foreach($rooms as $room)
+
+                        <option value="{{ $room->id }}">
+                            {{ $room->name }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            <!-- ICAL URL -->
             <div class="form-group">
 
                 <label>iCal URL</label>
 
                 <input type="text"
                        name="ical_url"
-                       placeholder="Paste iCal URL"
+                       placeholder="Paste Airbnb / Booking.com iCal URL"
                        required>
 
             </div>

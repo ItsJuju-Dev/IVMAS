@@ -249,7 +249,8 @@
 }
 </style>
 
-<h2 class="page-title">Booking Calendar</h2>
+<h2 class="page-title font-bold"
+    style="font-family: 'Poppins', sans-serif;">Booking Calendar</h2>
 
 <div class="card calendar-card">
     <div id="calendar"></div>

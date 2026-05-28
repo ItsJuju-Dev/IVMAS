@@ -114,13 +114,14 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        // VALIDATION (ADD THIS)
+        // VALIDATION 
         $request->validate([
             'guest_name' => 'required|string|max:255',
             'room_id' => 'required|exists:rooms,id',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after_or_equal:check_in_date',
-            'status' => 'required|in:pending,confirmed,checked_in,checked_out,blocked,cancelled'
+            'status' => 'required|in:pending,confirmed,checked_in,checked_out,blocked,cancelled',
+            'total_price' => 'nullable|numeric|min:0',
         ]);
 
         $room = Room::findOrFail($request->room_id);
@@ -133,9 +134,15 @@ class BookingController extends Controller
             $totalPrice = 0;
             $guestName = 'Unavailable';
         } else {
-            $nights = $checkIn->diffInDays($checkOut);
-            $totalPrice = max($nights, 1) * $room->base_price;
             $guestName = $request->guest_name;
+
+            // MANUAL PRICE OVERRIDE
+            if ($request->total_price !== null && $request->total_price !== '') {
+                $totalPrice = $request->total_price;
+            } else {
+                $nights = $checkIn->diffInDays($checkOut);
+                $totalPrice = max($nights, 1) * $room->base_price;
+            }
         }
 
         // UPDATE
